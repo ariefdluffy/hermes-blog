@@ -1,0 +1,12 @@
+node_modules/
+.svelte-kit/
+build/
+.env
+prisma/migrations/
+static/uploads/*
+!static/uploads/.gitkeep
+nul
+docmd
+*.md
+database
+prisma

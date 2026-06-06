@@ -1,0 +1,183 @@
+🗞️ Berita AI — 03 Juni 2026
+
+## Ringkasan Eksekutif
+
+Pekan ini didominasi oleh pendanaan raksasa: **Anthropic** catat Series H $65B di valuasi $965B — rekor AI sepanjang sejarah. **Google** umumkan era "agentic Gemini" di I/O 2026 dengan Gemini Omni, Managed Agents, dan AI Studio. **OpenAI** rilis GPT-5.5 Instant sebagai default ChatGPT, pensiunkan o3. **Anthropic** luncurkan Claude Opus 4.8 dengan dynamic workflows dan alignment terbaik. **Cohere** buka source Command A+. **Cerebras** bawa inferensi triliunan parameter dengan Kimi K2.6. **Qwen** rilis Qwen-Image dan Qwen3Guard. **Mistral** umumkan Physics AI, Devstral 2, dan Agents API. **NVIDIA** luncurkan Cosmos 3 via HuggingFace. **Cognition** Devin raih $1B di valuasi $26B. **Cursor/Anysphere** kabarnya deal $60B. **SoftBank** komit €75B untuk AI data center di Prancis.
+
+---
+
+## 1️⃣ OpenAI — GPT-5.5 Instant Jadi Default, o3 Pensiun
+
+📅 Mei-Juni 2026 | 🔗 https://openai.com/news/
+
+GPT-5.5 Instant resmi gantikan GPT-5.3 sebagai model default di ChatGPT. Codex CLI dapat "Goal Mode" dan MCP richer. GPT-5.6 sempat muncul di release notes — sinyal sedang dikembangkan. OpenAI mulai sunset: o3 akan pensiun dari ChatGPT 26 Agustus 2026, GPT-4.5 pensiun 30 hari lagi. ChatGPT for Excel dan Google Sheets dirilis. Fitur Memory Sources untuk kontrol privasi data.
+
+---
+
+## 2️⃣ Anthropic — Claude Opus 4.8 + Series H $65B di $965B
+
+📅 Mei-Juni 2026 | 🔗 https://www.anthropic.com/news
+
+**Claude Opus 4.8**: Upgrade dari Opus 4.7 dengan peningkatan di coding, agentic skills, reasoning. Fitur baru: kontrol "effort" di claude.ai, dynamic workflows untuk Claude Code (tangani masalah skala besar), fast mode 2.5x speed 3x lebih murah. Alignment assessment catat rekor prosocial traits, penurunan drastis misaligned behavior. Anthropic juga rilis "Claude Mythos" — model baru dengan intelligence di atas Opus.
+
+**Series H**: Pendanaan $65B di valuasi $965B — pendanaan AI terbesar dalam sejarah. Putaran ini bikin Anthropic jadi perusahaan AI termahal kedua setelah OpenAI.
+
+**Lainnya**: Project Glasswing diperluas, "Claude is a space to think", Milan office opening, Claude Design/Anthropic Labs.
+
+---
+
+## 3️⃣ Google — I/O 2026: Era Agentic Gemini
+
+📅 I/O 2026 (Mei 2026) | 🔗 https://blog.google/technology/ai/
+
+Sundar Pichai umumkan era "agentic Gemini" di I/O 2026. Token processing melonjak 7x jadi 3.2 quadrillion per bulan. Capaian utama:
+
+- **Gemini App agentic**: Proactive 24/7 help, Daily Brief, Gemini Spark (information to action)
+- **Gemini Omni**: Generate cinematic video dari ide
+- **Neural Expressive**: Design language baru untuk AI
+- **Managed Agents in Gemini API**: Akses infrastruktur agent Google
+- **Gemini for Science**: AI experiments untuk penemuan ilmiah
+- **Google AI Studio**: Build apps across Google ecosystem, integrasi Android
+- **Gemini 3.5** dirilis (disebut di RSS feed)
+
+Apollo & Blackstone kucurkan $36B debt deal untuk Google TPU — transaksi pembiayaan chip terbesar dalam sejarah.
+
+---
+
+## 4️⃣ Meta AI — Llama 4 Family
+
+📅 2026 | 🔗 https://ai.meta.com/blog/
+
+Meta lanjutkan pengembangan Llama 4: **Scout** (small, efisien), **Maverick** (medium), **Behemoth** (large). **Muse Spark** — model generatif baru. Detail teknis masih terbatas karena site JS-heavy.
+
+---
+
+## 5️⃣ Mistral AI — Physics AI, Devstral 2, Agents API
+
+📅 Mei-Juni 2026 | 🔗 https://mistral.ai/news
+
+- **Physics AI at Mistral**: Foundation model untuk engineering acceleration — terobosan besar di AI fisika
+- **Devstral 2 & Mistral Vibe CLI**: Unified agent untuk long-horizon productivity
+- **Mistral Agents API**: Build AI agents dengan platform Mistral
+- **AI Now Summit 2026**: Konferensi AI Mistral
+- **Mistral for Industrial Engineering**: Solusi AI untuk industri
+- **Vibe**: Unified agent untuk produktivitas jangka panjang
+
+---
+
+## 6️⃣ DeepSeek — (No data)
+
+Site JS-heavy, tidak bisa diekstrak. Periksa manual: https://www.deepseek.com/en/blog
+
+---
+
+## 7️⃣ Qwen (Alibaba) — Qwen-Image, Qwen3Guard
+
+📅 Mei-Juni 2026 | 🔗 https://qwenlm.github.io/blog/
+
+- **Qwen-Image**: Image generation dengan native text rendering — kualitas tinggi
+- **Qwen-Image-Edit**: Image editing efisien dan berkualitas
+- **Qwen3Guard**: Real-time safety untuk token stream
+- **GSPO**: Scalable reinforcement learning untuk language models
+- **Qwen-MT**: Machine translation cepat dan pintar
+
+---
+
+## 8️⃣ Cohere — Command A+ Open Source
+
+📅 Juni 2026 | 🔗 https://cohere.com/blog/command-a-plus
+
+Command A+: Model paling cepat dan powerful dari Cohere — dirilis open-source. Fokus pada sovereign agentic capabilities untuk semua. Tersedia di platform Cohere.
+
+---
+
+## 9️⃣ HuggingFace — Holo3.1, NVIDIA Cosmos 3, MiniMax M3
+
+📅 Juni 2026 | 🔗 https://huggingface.co/blog
+
+- **Holo3.1**: Fast & Local Computer Use Agents
+- **Mellum2**: 12B Mixture-of-Experts model by JetBrains
+- **NVIDIA Cosmos 3**: Open Omni-model pertama untuk Physical AI Reasoning
+- **MiniMax Goes Sparse**: Decoding M3's Attention mechanism
+- **Nemotron-Labs**: Diffusion Language Models untuk speed-of-light text generation
+- **LeRobot Humanoid**: Open, low-cost 3D-printed humanoid untuk robot learning
+- **ITBench-AA**: Frontier models skor di bawah 50% di enterprise IT tasks
+- **Agentic RL**: Token-In, Token-Out Done Right
+- **ZeroGPU**: Ship viral AI apps autonomously
+
+---
+
+## 🔟 Cerebras — Kimi K2.6, Multi-LoRA
+
+📅 Juni 2026 | 🔗 https://cerebras.ai/blog
+
+- **Trillion Parameter Inference**: Cerebras bawa Kimi K2.6 untuk enterprise — inferensi triliunan parameter
+- **Multi-LoRA on Cerebras Inference**: Efisiensi fine-tuning
+- **"Why the AI Race Shifted to Speed"**: Analisis kompetisi AI fokus ke kecepatan
+- **Sovereign AI**: Bagaimana Cerebras bantu nations
+- **MCP vs. CLI**: Debat berpusat pada speed
+
+---
+
+## 1️⃣1️⃣ Groq — Deconstructing Groq's Speed
+
+📅 2026 | 🔗 https://groq.com/blog/
+
+Artikel teknis membahas arsitektur yang bikin Groq cepat. Detail terbatas.
+
+---
+
+## 1️⃣2️⃣ NVIDIA — Cosmos 3, Agentic AI
+
+📅 2026 | 🔗 https://www.nvidia.com/en-us/ai/
+
+- **NVIDIA Cosmos 3**: Open omni-model untuk physical AI (via HuggingFace)
+- **Building Blocks for Agentic AI**: Panduan membangun AI agent
+- **Agentic Reasoning Reshapes the Workplace**: Dampak AI di tempat kerja
+- **Reasoning ON/OFF**: AI reasoning untuk tugas kompleks
+
+---
+
+## 1️⃣3️⃣ xAI/Grok — (Blocked Cloudflare)
+
+x.ai/blog diblokir Cloudflare. Cek manual: https://x.ai/blog
+
+---
+
+## 1️⃣4️⃣ Berita Industri Lainnya
+
+### 💰 Pendanaan & Valuasi
+- **Anthropic**: $65B Series H di $965B valuation — terbesar dalam sejarah AI
+- **Cognition Devin**: $1B di $26B valuation — revenue tumbuh 1,230% dalam 12 bulan
+- **Cursor/Anysphere**: Deal $60B (laporan Kersai)
+- **SoftBank**: Komit €75B bangun AI data centers di Prancis
+- **Apollo & Blackstone**: $36B debt deal untuk Google TPU
+
+### 🛡️ Keamanan & Regulasi
+- **LLM Agent Cyberattack Pertama**: Sysdig dokumentasikan AWS database dieksfiltrasi otonom kurang dari 1 jam
+- **EU AI Act**: Segera berlaku — tata kelola AI mulai nyata
+- **Wikipedia Editors Strike**: Protes AI-driven Wikimedia layoffs
+
+### 🤖 Robotika & Hardware
+- **Foundation's Phantom**: Humanoid robot dikerahkan ke Ukraina — deployment humanoid pertama di medan perang
+- **SpaceX**: Bertransformasi jadi AI infrastructure company
+- **GitHub Copilot**: Token billing mulai berlaku — trending "What a Joke" di Reddit/X
+
+---
+
+## 📊 LLM Arena Leaderboard (Estimasi Top 5 — Juni 2026)
+
+Berdasarkan benchmark dan laporan yang tersedia:
+
+1. **Claude Opus 4.8** (Anthropic) — Unggul coding, agentic skills, alignment
+2. **Gemini 3.1 Pro / Gemini Omni** (Google) — Multimodal, agentic, scale
+3. **GPT-5.5 Instant** (OpenAI) — Default ChatGPT, keseimbangan speed-kualitas
+4. **Claude Mythos Preview** (Anthropic) — Intelligence di atas Opus (baru)
+5. **Command A+** (Cohere) — Open-source, sovereign capabilities
+
+> *Catatan: Leaderboard ini estimasi berdasarkan data yang terkumpul. Cek lmarena.ai untuk rankings real-time.*
+
+---
+
+📡 **Sumber**: OpenAI Blog, Anthropic News, Google AI Blog, Mistral AI, Qwen Blog, Cohere Blog, HuggingFace Blog, Cerebras Blog, NVIDIA AI, Kersai, BuildFastWithAI, Codersera, DuckDuckGo News
+📅 **Compiled**: 3 Juni 2026 | 🔗 **Full digest**: https://lockbit.my.id/tech/news/2026-06-03/
