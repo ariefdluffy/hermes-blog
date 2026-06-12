@@ -1,7 +1,6 @@
 <script lang="ts">
 	import type { ArticleFormData, ContentType, ArticleStatus } from '$lib/types';
 	import { slugify } from '$lib/utils';
-	import { CATEGORIES } from '$lib/constants';
 
 	interface Tag {
 		id: string;
@@ -12,11 +11,12 @@
 	interface Props {
 		article?: ArticleFormData | null;
 		tags?: Tag[];
+		categories?: { id: string; name: string; slug: string }[];
 		onsubmit: (data: ArticleFormData) => void;
 		loading?: boolean;
 	}
 
-	let { article = null, tags = [], onsubmit, loading = false }: Props = $props();
+	let { article = null, tags = [], categories = [], onsubmit, loading = false }: Props = $props();
 
 	let title = $state(article?.title ?? '');
 	let excerpt = $state(article?.excerpt ?? '');
@@ -26,6 +26,7 @@
 	let seoDescription = $state(article?.seoDescription ?? '');
 	let coverImage = $state(article?.coverImage ?? '');
 	let selectedTags = $state<string[]>(article?.tags ?? []);
+	let categoryId = $state(article?.categoryId ?? '');
 	let status = $state<ArticleStatus>(article?.status ?? 'DRAFT');
 	let tagInput = $state('');
 	let showPreview = $state(false);
@@ -65,6 +66,7 @@
 			seoTitle: seoTitle || undefined,
 			seoDescription: seoDescription || undefined,
 			coverImage: coverImage || undefined,
+			categoryId: categoryId || undefined,
 			tags: selectedTags,
 			status
 		});
@@ -193,6 +195,21 @@
 				class="w-full rounded-lg border border-slate-600 bg-slate-800 px-3 py-2 text-sm text-white placeholder-slate-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
 			/>
 		</div>
+	</div>
+
+	<!-- Category -->
+	<div>
+		<label for="category" class="mb-1.5 block text-sm font-medium text-slate-300">Category</label>
+		<select
+			id="category"
+			bind:value={categoryId}
+			class="w-full rounded-lg border border-slate-600 bg-slate-800 px-4 py-2.5 text-white focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+		>
+			<option value="">No category</option>
+			{#each categories as cat (cat.id)}
+				<option value={cat.id}>{cat.name}</option>
+			{/each}
+		</select>
 	</div>
 
 	<!-- Tags -->

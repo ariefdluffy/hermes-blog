@@ -12,6 +12,19 @@
 
 	let loading = $state(false);
 	let error = $state<string | null>(null);
+	let categories = $state<{ id: string; name: string; slug: string }[]>([]);
+
+	async function loadCategories() {
+		try {
+			const res = await fetch('/api/admin/categories');
+			if (res.ok) {
+				const d = await res.json();
+				categories = d.data ?? [];
+			}
+		} catch {}
+	}
+
+	$effect(() => { loadCategories(); });
 
 	let article = $derived(props.data.article);
 
@@ -23,6 +36,7 @@
 		seoTitle: article.seoTitle ?? '',
 		seoDescription: article.seoDescription ?? '',
 		coverImage: article.coverImage ?? '',
+		categoryId: article.category?.id ?? '',
 		tags: article.tags?.map((t: { name: string }) => t.name) ?? [],
 		status: article.status === 'ARCHIVED' ? 'DRAFT' : article.status
 	});
@@ -78,6 +92,6 @@
 	{/if}
 
 	<div class="rounded-xl border border-slate-700/50 bg-slate-800/50 p-6">
-		<ArticleForm article={initialData} onsubmit={handleSubmit} {loading} />
+		<ArticleForm article={initialData} {categories} onsubmit={handleSubmit} {loading} />
 	</div>
 </div>

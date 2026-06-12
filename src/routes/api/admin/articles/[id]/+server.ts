@@ -15,6 +15,7 @@ const updateSchema = z.object({
   seoDescription: z.string().max(500).optional(),
   coverImage: z.string().url().optional().or(z.literal("")).optional(),
   status: z.enum(["DRAFT", "REVIEW", "PUBLISHED", "ARCHIVED"]).optional(),
+  categoryId: z.string().optional(),
   tags: z.array(z.string()).optional(),
 });
 
@@ -44,6 +45,7 @@ function mapArticle(a: any): ArticleResponse {
     createdAt: a.createdAt.toISOString(),
     updatedAt: a.updatedAt.toISOString(),
     author: a.author,
+    category: a.category ?? null,
     tags: a.tags.map((at: any) => at.tag),
   };
 }
@@ -59,6 +61,7 @@ export const GET: RequestHandler = async ({ params, locals }) => {
     where: { id: params.id },
     include: {
       author: { select: { id: true, username: true } },
+      category: { select: { id: true, name: true, slug: true } },
       tags: {
         include: { tag: { select: { id: true, name: true, slug: true } } },
       },
@@ -69,7 +72,6 @@ export const GET: RequestHandler = async ({ params, locals }) => {
     return json({ error: "Article not found" }, { status: 404 });
   }
 
-  // AUTHOR hanya bisa lihat artikel sendiri
   if (isAuthor && article.authorId !== locals.user.id) {
     return forbiddenError();
   }
@@ -97,7 +99,6 @@ export const PUT: RequestHandler = async ({ params, request, locals }) => {
 
   const data = parsed.data;
 
-  // Check article exists and ownership for AUTHOR role
   const existing = await prisma.article.findUnique({
     where: { id: params.id },
     select: { id: true, authorId: true, status: true },
@@ -107,7 +108,6 @@ export const PUT: RequestHandler = async ({ params, request, locals }) => {
     return json({ error: "Article not found" }, { status: 404 });
   }
 
-  // AUTHOR can only edit own articles
   if (
     !canAction(locals.user.role, "MANAGE_ARTICLES") &&
     !canAction(locals.user.role, "EDIT_OWN_ARTICLES")
@@ -118,7 +118,6 @@ export const PUT: RequestHandler = async ({ params, request, locals }) => {
     return forbiddenError();
   }
 
-  // Check slug uniqueness if title changed
   if (data.title !== undefined) {
     const newSlug = slugify(data.title);
     const slugConflict = await prisma.article.findFirst({
@@ -132,7 +131,6 @@ export const PUT: RequestHandler = async ({ params, request, locals }) => {
     }
   }
 
-  // Build update data
   const updateData: any = {};
   if (data.title !== undefined) {
     updateData.title = data.title;
@@ -149,8 +147,9 @@ export const PUT: RequestHandler = async ({ params, request, locals }) => {
     updateData.seoDescription = data.seoDescription || null;
   if (data.coverImage !== undefined)
     updateData.coverImage = data.coverImage || null;
+  if (data.categoryId !== undefined)
+    updateData.categoryId = data.categoryId || null;
 
-  // Handle status change and publishedAt
   if (data.status !== undefined) {
     updateData.status = data.status;
     if (data.status === "PUBLISHED" && existing.status !== "PUBLISHED") {
@@ -161,7 +160,6 @@ export const PUT: RequestHandler = async ({ params, request, locals }) => {
     }
   }
 
-  // Handle tags update
   if (data.tags !== undefined) {
     const tagRecords = await Promise.all(
       data.tags.map(async (tagName) => {
@@ -174,7 +172,6 @@ export const PUT: RequestHandler = async ({ params, request, locals }) => {
       }),
     );
 
-    // Delete old tag connections, then create new ones
     await prisma.articleTag.deleteMany({ where: { articleId: params.id } });
     updateData.tags = {
       create: tagRecords.map((tag) => ({ tagId: tag.id })),
@@ -186,6 +183,7 @@ export const PUT: RequestHandler = async ({ params, request, locals }) => {
     data: updateData,
     include: {
       author: { select: { id: true, username: true } },
+      category: { select: { id: true, name: true, slug: true } },
       tags: {
         include: { tag: { select: { id: true, name: true, slug: true } } },
       },

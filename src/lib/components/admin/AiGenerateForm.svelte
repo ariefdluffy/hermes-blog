@@ -1,15 +1,15 @@
 <script lang="ts">
-	import { CATEGORIES } from '$lib/constants';
+	import { CATEGORIES, CATEGORY_SLUGS } from '$lib/constants';
 
 	interface Props {
-		onsubmit: (data: { source: string; category: keyof typeof CATEGORIES }) => void;
+		onsubmit: (data: { source: string; category: string }) => void;
 		loading?: boolean;
 	}
 
 	let { onsubmit, loading = false }: Props = $props();
 
 	let source = $state('');
-	let category = $state<keyof typeof CATEGORIES>('AI');
+	let categoryKey = $state<keyof typeof CATEGORIES>('RISET');
 	let showError = $state(false);
 
 	const categoryOptions = Object.entries(CATEGORIES) as [keyof typeof CATEGORIES, string][];
@@ -21,7 +21,7 @@
 			return;
 		}
 		showError = false;
-		onsubmit({ source: source.trim(), category });
+		onsubmit({ source: source.trim(), category: CATEGORY_SLUGS[categoryKey] });
 	}
 </script>
 
@@ -44,7 +44,7 @@
 		<label for="category" class="mb-1.5 block text-sm font-medium text-slate-300">Category</label>
 		<select
 			id="category"
-			bind:value={category}
+			bind:value={categoryKey}
 			class="w-full rounded-lg border border-slate-600 bg-slate-800 px-4 py-2.5 text-white focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
 		>
 			{#each categoryOptions as [key, label]}
@@ -58,8 +58,7 @@
 		<div class="space-y-1.5">
 			{#each categoryOptions as [key, label]}
 				<div class="flex items-start gap-2">
-					<span class="text-xs font-medium text-slate-500 shrink-0 w-36">{label}:</span>
-					<span class="text-xs text-slate-600">{(CATEGORIES[key] as any)?.length ? '' : ''}</span>
+					<span class="text-xs font-medium text-slate-500 shrink-0 w-36">{label}</span>
 				</div>
 			{/each}
 		</div>

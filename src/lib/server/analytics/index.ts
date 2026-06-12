@@ -87,6 +87,7 @@ export async function getTrendingArticles(
     take: limit,
     include: {
       author: { select: { id: true, username: true } },
+      category: { select: { id: true, name: true, slug: true } },
       tags: {
         include: { tag: { select: { id: true, name: true, slug: true } } },
       },

@@ -4,20 +4,23 @@ import type { RequestHandler } from "./$types";
 
 export const GET: RequestHandler = async () => {
   try {
-    const tags = await prisma.tag.findMany({
+    const categories = await prisma.category.findMany({
       include: {
         _count: {
-          select: { articles: { where: { article: { status: "PUBLISHED" } } } },
+          select: { articles: { where: { status: "PUBLISHED" } } },
         },
       },
       orderBy: { name: "asc" },
     });
 
     return json({
-      data: tags.map((t) => ({
-        slug: t.slug,
-        name: t.name,
-        count: t._count.articles,
+      data: categories.map((c) => ({
+        id: c.id,
+        slug: c.slug,
+        name: c.name,
+        description: c.description,
+        icon: c.icon,
+        count: c._count.articles,
       })),
     });
   } catch (err) {

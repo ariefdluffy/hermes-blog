@@ -34,6 +34,7 @@ export const GET: RequestHandler = async ({ url }) => {
 			take: perPage,
 			include: {
 				author: { select: { id: true, username: true } },
+				category: { select: { id: true, name: true, slug: true } },
 				tags: { include: { tag: { select: { id: true, name: true, slug: true } } } }
 			}
 		}),
@@ -67,6 +68,7 @@ function mapArticle(a: any): ArticleResponse {
 		createdAt: a.createdAt.toISOString(),
 		updatedAt: a.updatedAt.toISOString(),
 		author: a.author,
+		category: a.category ?? null,
 		tags: a.tags.map((at: any) => at.tag)
 	};
 }

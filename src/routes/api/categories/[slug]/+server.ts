@@ -9,12 +9,12 @@ export const GET: RequestHandler = async ({ params, url }) => {
 		const page = Math.max(1, parseInt(url.searchParams.get('page') || String(PAGINATION.DEFAULT_PAGE)));
 		const perPage = PAGINATION.DEFAULT_PER_PAGE;
 
-		const tag = await prisma.tag.findUnique({
+		const category = await prisma.category.findUnique({
 			where: { slug },
-			select: { id: true, name: true, slug: true }
+			select: { id: true, name: true, slug: true, description: true, icon: true }
 		});
 
-		if (!tag) {
+		if (!category) {
 			return json({ error: 'Category not found' }, { status: 404 });
 		}
 
@@ -22,7 +22,7 @@ export const GET: RequestHandler = async ({ params, url }) => {
 			prisma.article.findMany({
 				where: {
 					status: 'PUBLISHED',
-					tags: { some: { tag: { slug } } }
+					categoryId: category.id
 				},
 				include: {
 					author: { select: { id: true, username: true } },
@@ -35,13 +35,13 @@ export const GET: RequestHandler = async ({ params, url }) => {
 			prisma.article.count({
 				where: {
 					status: 'PUBLISHED',
-					tags: { some: { tag: { slug } } }
+					categoryId: category.id
 				}
 			})
 		]);
 
 		return json({
-			tag,
+			category,
 			articles: articles.map((a) => ({
 				id: a.id,
 				title: a.title,

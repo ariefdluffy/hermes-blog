@@ -17,16 +17,44 @@ export const CONTENT_TYPE = {
 } as const;
 
 export const CATEGORIES = {
-  AI: "Artificial Intelligence",
-  US_STOCKS: "US Stock Market",
-  ID_STOCKS: "Indonesian Stock Market",
-  TECHNOLOGY: "Technology News",
+  RISET: "Riset",
+  TEKNOLOGI_AI: "Teknologi & AI",
+  TUTORIAL: "Tutorial",
+  KNOWLEDGE_BASE: "Knowledge Base",
+} as const;
+
+export const CATEGORY_SLUGS = {
+  RISET: "riset",
+  TEKNOLOGI_AI: "teknologi-ai",
+  TUTORIAL: "tutorial",
+  KNOWLEDGE_BASE: "knowledge-base",
+} as const;
+
+export const CATEGORY_META: Record<string, { label: string; description: string; icon: string }> = {
+  riset: {
+    label: "Riset",
+    description: "Ringkasan paper arXiv & riset AI terbaru",
+    icon: "🔬",
+  },
+  "teknologi-ai": {
+    label: "Teknologi & AI",
+    description: "Berita teknologi, AI, dan inovasi digital",
+    icon: "💻",
+  },
+  tutorial: {
+    label: "Tutorial",
+    description: "Panduan langkah-demi-langkah programming & tools",
+    icon: "📖",
+  },
+  "knowledge-base": {
+    label: "Knowledge Base",
+    description: "Referensi, dokumentasi, dan pengetahuan umum",
+    icon: "📚",
+  },
 } as const;
 
 export const NEWS_SOURCES = {
   AI: ["OpenAI", "Anthropic", "Google AI", "NVIDIA", "TechCrunch", "The Verge"],
-  US_STOCKS: ["CNBC", "Bloomberg", "Yahoo Finance", "MarketWatch"],
-  ID_STOCKS: ["IDX", "Kontan", "Bisnis Indonesia", "CNBC Indonesia"],
   TECHNOLOGY: ["Ars Technica", "Wired", "Hacker News", "GitHub Blog"],
 } as const;
 

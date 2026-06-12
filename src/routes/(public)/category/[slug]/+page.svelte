@@ -2,7 +2,7 @@
 	import Pagination from '$lib/components/ui/Pagination.svelte';
 	import SeoHead from '$lib/components/blog/SeoHead.svelte';
 	import { goto } from '$app/navigation';
-	import { APP_NAME } from '$lib/constants';
+	import { APP_NAME, CATEGORY_META } from '$lib/constants';
 	import type { PageData } from './$types';
 
 	interface Props {
@@ -12,7 +12,8 @@
 	let props: Props = $props();
 
 	let articles = $derived(props.data.articles);
-	let tag = $derived(props.data.tag);
+	let category = $derived(props.data.category);
+	let meta = $derived(category ? (CATEGORY_META[category.slug] ?? null) : null);
 
 	function handlePageChange(page: number) {
 		goto(`/category/${props.data.slug}?page=${page}`);
@@ -20,13 +21,13 @@
 </script>
 
 <SeoHead
-	title={tag ? tag.name : 'Category'}
-	description={tag ? `Articles tagged "${tag.name}" on ${APP_NAME}` : ''}
+	title={category ? category.name : 'Category'}
+	description={category ? (category.description ?? `Articles in "${category.name}" on ${APP_NAME}`) : ''}
 	url={`/category/${props.data.slug}`}
 />
 
 <div class="mx-auto max-w-3xl px-5 py-8">
-	{#if !tag}
+	{#if !category}
 		<div class="py-20 text-center">
 			<svg class="mx-auto mb-6 h-12 w-12 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
@@ -40,10 +41,14 @@
 	{:else}
 		<!-- Header -->
 		<div class="flex items-center gap-2 mb-6">
-			<svg class="w-5 h-5 text-indigo-400" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"/></svg>
-			<h1 class="text-xl font-bold text-slate-200">{tag.name}</h1>
+			<span class="text-xl">{meta?.icon ?? '📂'}</span>
+			<h1 class="text-xl font-bold text-slate-200">{category.name}</h1>
 			<span class="text-xs text-slate-500 bg-slate-900 px-2 py-0.5 rounded-full">{props.data.totalArticles} artikel</span>
 		</div>
+
+		{#if meta?.description}
+			<p class="text-sm text-slate-400 mb-6">{meta.description}</p>
+		{/if}
 
 		{#if articles.length > 0}
 			<div class="space-y-2">

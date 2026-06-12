@@ -16,6 +16,7 @@ const articleSchema = z.object({
   seoDescription: z.string().max(500).optional(),
   coverImage: z.string().url().optional().or(z.literal("")),
   status: z.enum(["DRAFT", "REVIEW", "PUBLISHED"]).default("DRAFT"),
+  categoryId: z.string().optional(),
   tags: z.array(z.string()).default([]),
 });
 
@@ -45,6 +46,7 @@ function mapArticle(a: any): ArticleResponse {
     createdAt: a.createdAt.toISOString(),
     updatedAt: a.updatedAt.toISOString(),
     author: a.author,
+    category: a.category ?? null,
     tags: a.tags.map((at: any) => at.tag),
   };
 }
@@ -72,7 +74,6 @@ export const GET: RequestHandler = async ({ url, locals }) => {
   const search = url.searchParams.get("search")?.trim();
 
   const where: any = {};
-  // AUTHOR hanya bisa lihat artikel sendiri
   if (isAuthor) {
     where.authorId = locals.user.id;
   } else {
@@ -95,6 +96,7 @@ export const GET: RequestHandler = async ({ url, locals }) => {
       take: perPage,
       include: {
         author: { select: { id: true, username: true } },
+        category: { select: { id: true, name: true, slug: true } },
         tags: {
           include: { tag: { select: { id: true, name: true, slug: true } } },
         },
@@ -169,12 +171,14 @@ export const POST: RequestHandler = async ({ request, locals }) => {
       status: data.status,
       publishedAt: data.status === "PUBLISHED" ? new Date() : null,
       authorId: locals.user.id,
+      categoryId: data.categoryId ?? null,
       tags: {
         create: tagRecords.map((tag) => ({ tagId: tag.id })),
       },
     },
     include: {
       author: { select: { id: true, username: true } },
+      category: { select: { id: true, name: true, slug: true } },
       tags: {
         include: { tag: { select: { id: true, name: true, slug: true } } },
       },

@@ -13,6 +13,7 @@ export const GET: RequestHandler = async ({
     where: { slug: params.slug, status: "PUBLISHED" },
     include: {
       author: { select: { id: true, username: true } },
+      category: { select: { id: true, name: true, slug: true } },
       tags: {
         include: { tag: { select: { id: true, name: true, slug: true } } },
       },
@@ -48,6 +49,7 @@ export const GET: RequestHandler = async ({
     createdAt: article.createdAt.toISOString(),
     updatedAt: article.updatedAt.toISOString(),
     author: article.author,
+    category: article.category ?? null,
     tags: article.tags.map((at) => at.tag),
   } satisfies ArticleResponse);
 };

@@ -21,10 +21,10 @@
 
 	type CatConfig = { paths: string[]; colorHex: string; count: number; description: string };
 	let catMap: Record<string, CatConfig> = {
-		ai: { paths: ['M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2', 'M6.453 15h11.094', 'M8.5 2h7'], colorHex: '#6366f1', count: 0, description: 'Ringkasan paper arXiv & Semantic Scholar setiap hari' },
-		technology: { paths: ['M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z', 'M20 2v4', 'M22 4h-4', 'M4 20a2 2 0 1 0 4 0a2 2 0 0 0-4 0'], colorHex: '#a855f7', count: 0, description: 'Berita AI terkini dan artikel teknologi mendalam' },
-		'us-stocks': { paths: ['M3 3v18h18', 'M3 7l7 7l4-4l7 7'], colorHex: '#10b981', count: 0, description: 'Analisis pasar saham Amerika Serikat' },
-		'id-stocks': { paths: ['M12 2v20', 'M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6'], colorHex: '#f97316', count: 0, description: 'Analisis pasar modal Indonesia' },
+		riset: { paths: ['M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2', 'M6.453 15h11.094', 'M8.5 2h7'], colorHex: '#6366f1', count: 0, description: 'Ringkasan paper arXiv & Semantic Scholar setiap hari' },
+		'teknologi-ai': { paths: ['M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z', 'M20 2v4', 'M22 4h-4', 'M4 20a2 2 0 1 0 4 0a2 2 0 0 0-4 0'], colorHex: '#a855f7', count: 0, description: 'Berita AI terkini dan artikel teknologi mendalam' },
+		tutorial: { paths: ['M4 14l4-4 4 4', 'M8 12v8', 'M12 6h8', 'M14 10h6', 'M16 14h4', 'M18 18h2'], colorHex: '#10b981', count: 0, description: 'Panduan langkah-demi-langkah programming & tools' },
+		'knowledge-base': { paths: ['M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20'], colorHex: '#f59e0b', count: 0, description: 'Referensi, dokumentasi, dan pengetahuan umum' },
 	};
 
 	let sortedCats = $derived(
@@ -65,12 +65,12 @@
 			<div class="flex flex-wrap gap-3">
 				<div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/80 border border-slate-800">
 					<svg class="w-3.5 h-3.5 text-indigo-400" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2"/><path d="M6.453 15h11.094"/><path d="M8.5 2h7"/></svg>
-					<span class="text-xs font-semibold text-slate-200">{categories.find(c => c.slug === 'ai')?.count ?? 0}</span>
+					<span class="text-xs font-semibold text-slate-200">{categories.find(c => c.slug === 'riset')?.count ?? 0}</span>
 					<span class="text-xs text-slate-500">Research Digests</span>
 				</div>
 				<div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/80 border border-slate-800">
 					<svg class="w-3.5 h-3.5 text-indigo-400" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
-					<span class="text-xs font-semibold text-slate-200">{categories.find(c => c.slug === 'technology')?.count ?? 0}</span>
+					<span class="text-xs font-semibold text-slate-200">{categories.find(c => c.slug === 'teknologi-ai')?.count ?? 0}</span>
 					<span class="text-xs text-slate-500">Artikel Teknologi</span>
 				</div>
 				<div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/80 border border-slate-800">

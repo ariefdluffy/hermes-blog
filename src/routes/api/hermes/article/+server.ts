@@ -22,7 +22,7 @@ const agentArticleSchema = z.object({
 	seoTitle: z.string().max(255).optional(),
 	seoDescription: z.string().max(500).optional(),
 	coverImage: z.string().url().optional().or(z.literal('')),
-	category: z.enum(['AI', 'US_STOCKS', 'ID_STOCKS', 'TECHNOLOGY']),
+	category: z.string().min(1),
 	source: z.string().optional(),
 	tags: z.array(z.string()).default([])
 });
@@ -139,12 +139,23 @@ export const GET: RequestHandler = async ({ request }) => {
 		dbStatus = 'error';
 	}
 
+	// ── Fetch categories ─────────────────────────────────────────
+	let categories: { slug: string; name: string }[] = [];
+	try {
+		const cats = await prisma.category.findMany({
+			select: { slug: true, name: true },
+			orderBy: { name: 'asc' }
+		});
+		categories = cats;
+	} catch {}
+
 	return json({
 		status: 'ok',
 		version: '1.0',
 		timestamp: new Date().toISOString(),
 		uptime: process.uptime(),
-		db: dbStatus
+		db: dbStatus,
+		categories
 	});
 };
 
@@ -239,22 +250,36 @@ export const POST: RequestHandler = async ({ request }) => {
 		return err(500, 'INTERNAL_ERROR', 'Failed to process tags', requestId);
 	}
 
-	// Add category as tag
-	let categoryTag;
+	// Resolve category — accept slug or name (MySQL CI collation handles case-insensitive match)
+	let categoryRecord;
 	try {
-		const categoryTagSlug = slugify(data.category);
-		categoryTag = await prisma.tag.upsert({
-			where: { slug: categoryTagSlug },
-			update: {},
-			create: { name: data.category, slug: categoryTagSlug }
+		const catSlug = slugify(data.category);
+		categoryRecord = await prisma.category.findFirst({
+			where: {
+				OR: [
+					{ slug: catSlug },
+					{ slug: data.category },
+					{ name: data.category }
+				]
+			}
 		});
+		if (!categoryRecord) {
+			// Auto-create category if not exists
+			const catName = data.category
+				.split(/[-_ ]+/)
+				.map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+				.join(' ');
+			categoryRecord = await prisma.category.create({
+				data: {
+					slug: catSlug,
+					name: catName
+				}
+			});
+		}
 	} catch (e) {
-		console.error(`[${requestId}] DB error category tag:`, e);
-		return err(500, 'INTERNAL_ERROR', 'Failed to process category tag', requestId);
+		console.error(`[${requestId}] DB error resolving category:`, e);
+		return err(500, 'INTERNAL_ERROR', 'Failed to resolve category', requestId);
 	}
-
-	const allTagIds = new Set(tagRecords.map((t: { id: string }) => t.id));
-	allTagIds.add(categoryTag.id);
 
 	// ── Create article ──────────────────────────────────────────────
 	let article;
@@ -272,8 +297,9 @@ export const POST: RequestHandler = async ({ request }) => {
 				readTime: calculateReadTime(data.content),
 				status: 'DRAFT',
 				authorId: systemAuthor.id,
+				categoryId: categoryRecord.id,
 				tags: {
-					create: [...allTagIds].map((id) => ({ tagId: id }))
+					create: tagRecords.map((t: { id: string }) => ({ tagId: t.id }))
 				}
 			},
 			select: {

@@ -22,6 +22,15 @@ export interface RegisterRequest {
   password: string;
 }
 
+export interface CategoryResponse {
+  id: string;
+  name: string;
+  slug: string;
+  description: string | null;
+  icon: string | null;
+  articleCount: number;
+}
+
 export interface ArticleResponse {
   id: string;
   slug: string;
@@ -40,6 +49,7 @@ export interface ArticleResponse {
   updatedAt: string;
   author: { id: string; username: string };
   tags: { id: string; name: string; slug: string }[];
+  category?: { id: string; name: string; slug: string } | null;
 }
 
 export interface PaginatedResponse<T> {
@@ -66,6 +76,7 @@ export interface ArticleFormData {
   seoTitle?: string;
   seoDescription?: string;
   coverImage?: string;
+  categoryId?: string;
   tags: string[];
   status: ArticleStatus;
 }

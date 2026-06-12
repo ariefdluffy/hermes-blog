@@ -5,6 +5,19 @@
 
 	let loading = $state(false);
 	let error = $state<string | null>(null);
+	let categories = $state<{ id: string; name: string; slug: string }[]>([]);
+
+	async function loadCategories() {
+		try {
+			const res = await fetch('/api/admin/categories');
+			if (res.ok) {
+				const d = await res.json();
+				categories = d.data ?? [];
+			}
+		} catch {}
+	}
+
+	$effect(() => { loadCategories(); });
 
 	async function handleSubmit(formData: ArticleFormData) {
 		loading = true;
@@ -57,6 +70,6 @@
 	{/if}
 
 	<div class="rounded-xl border border-slate-700/50 bg-slate-800/50 p-6">
-		<ArticleForm onsubmit={handleSubmit} {loading} />
+		<ArticleForm {categories} onsubmit={handleSubmit} {loading} />
 	</div>
 </div>

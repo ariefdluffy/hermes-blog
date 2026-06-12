@@ -22,6 +22,7 @@ export const GET: RequestHandler = async ({ locals, url }) => {
 			take: perPage,
 			include: {
 				author: { select: { id: true, username: true } },
+				category: { select: { id: true, name: true, slug: true } },
 				tags: { include: { tag: { select: { id: true, name: true, slug: true } } } }
 			}
 		}),
@@ -38,6 +39,7 @@ export const GET: RequestHandler = async ({ locals, url }) => {
 			readTime: a.readTime,
 			status: a.status,
 			author: a.author,
+			category: a.category ?? null,
 			tags: a.tags.map((at) => at.tag),
 			createdAt: a.createdAt,
 			updatedAt: a.updatedAt

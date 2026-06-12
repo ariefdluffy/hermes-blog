@@ -27,6 +27,7 @@ export const GET: RequestHandler = async ({ url }) => {
 			createdAt: a.createdAt.toISOString(),
 			updatedAt: a.updatedAt.toISOString(),
 			author: a.author,
+			category: a.category ?? null,
 			tags: a.tags.map((at: any) => at.tag)
 		})) satisfies ArticleResponse[]
 	);

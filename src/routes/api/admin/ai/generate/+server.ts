@@ -9,7 +9,7 @@ import { z } from 'zod';
 
 const generateSchema = z.object({
 	source: z.string().min(1),
-	category: z.enum(['AI', 'US_STOCKS', 'ID_STOCKS', 'TECHNOLOGY'])
+	category: z.enum(['riset', 'teknologi-ai', 'tutorial', 'knowledge-base'])
 });
 
 export const POST: RequestHandler = async ({ locals, request }) => {
@@ -49,6 +49,13 @@ export const POST: RequestHandler = async ({ locals, request }) => {
 		})
 	);
 
+	// Resolve category
+	let categoryId: string | null = null;
+	try {
+		const cat = await prisma.category.findUnique({ where: { slug: category } });
+		if (cat) categoryId = cat.id;
+	} catch {}
+
 	// Save as DRAFT
 	const article = await prisma.article.create({
 		data: {
@@ -62,6 +69,7 @@ export const POST: RequestHandler = async ({ locals, request }) => {
 			readTime: calculateReadTime(aiResult.content),
 			status: 'DRAFT',
 			authorId: locals.user!.id,
+			categoryId,
 			tags: {
 				create: tagRecords.map((tag: { id: string }) => ({ tagId: tag.id }))
 			}

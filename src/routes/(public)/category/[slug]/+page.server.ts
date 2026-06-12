@@ -8,17 +8,27 @@ export const load: PageServerLoad = async ({ params, url }) => {
 	const page = Math.max(1, parseInt(url.searchParams.get('page') || String(PAGINATION.DEFAULT_PAGE)));
 	const perPage = PAGINATION.DEFAULT_PER_PAGE;
 
+	const category = await prisma.category.findUnique({
+		where: { slug },
+		select: { id: true, name: true, slug: true, description: true, icon: true }
+	});
+
+	if (!category) {
+		return {
+			slug,
+			category: null,
+			articles: [],
+			totalArticles: 0,
+			page: 1,
+			totalPages: 0
+		};
+	}
+
 	const [articles, total] = await Promise.all([
 		prisma.article.findMany({
 			where: {
 				status: 'PUBLISHED',
-				tags: {
-					some: {
-						tag: {
-							slug
-						}
-					}
-				}
+				categoryId: category.id
 			},
 			include: {
 				author: {
@@ -35,30 +45,10 @@ export const load: PageServerLoad = async ({ params, url }) => {
 		prisma.article.count({
 			where: {
 				status: 'PUBLISHED',
-				tags: {
-					some: {
-						tag: { slug }
-					}
-				}
+				categoryId: category.id
 			}
 		})
 	]);
-
-	const tag = await prisma.tag.findUnique({
-		where: { slug },
-		select: { id: true, name: true, slug: true }
-	});
-
-	if (!tag) {
-		return {
-			slug,
-			tag: null,
-			articles: [],
-			totalArticles: 0,
-			page: 1,
-			totalPages: 0
-		};
-	}
 
 	const serializedArticles = articles.map((a) => ({
 		id: a.id,
@@ -74,7 +64,7 @@ export const load: PageServerLoad = async ({ params, url }) => {
 
 	return {
 		slug,
-		tag,
+		category,
 		articles: serializedArticles,
 		totalArticles: total,
 		page,

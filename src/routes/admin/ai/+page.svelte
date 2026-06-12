@@ -4,7 +4,7 @@
     import Badge from "$lib/components/ui/Badge.svelte";
     import { confirm } from "$lib/stores/confirm.svelte";
     import { toast } from "$lib/stores/toast.svelte";
-    import { CATEGORIES } from "$lib/constants";
+
     import type { PageData } from "./$types";
 
     interface Props {
@@ -38,7 +38,7 @@
 
     async function handleGenerate(formData: {
         source: string;
-        category: keyof typeof CATEGORIES;
+        category: string;
     }) {
         generating = true;
         generateError = null;

@@ -11,6 +11,7 @@ export const GET: RequestHandler = async ({ url }) => {
 		Math.max(1, Number(url.searchParams.get('perPage')) || PAGINATION.DEFAULT_PER_PAGE)
 	);
 	const tag = url.searchParams.get('tag');
+	const category = url.searchParams.get('category');
 	const search = url.searchParams.get('search');
 	const featured = url.searchParams.get('featured') === 'true';
 
@@ -18,6 +19,10 @@ export const GET: RequestHandler = async ({ url }) => {
 
 	if (tag) {
 		where.tags = { some: { tag: { slug: tag } } };
+	}
+
+	if (category) {
+		where.category = { slug: category };
 	}
 
 	if (search) {
@@ -35,6 +40,7 @@ export const GET: RequestHandler = async ({ url }) => {
 			take: 5,
 			include: {
 				author: { select: { id: true, username: true } },
+				category: { select: { id: true, name: true, slug: true } },
 				tags: { include: { tag: { select: { id: true, name: true, slug: true } } } }
 			}
 		});
@@ -56,6 +62,7 @@ export const GET: RequestHandler = async ({ url }) => {
 			take: perPage,
 			include: {
 				author: { select: { id: true, username: true } },
+				category: { select: { id: true, name: true, slug: true } },
 				tags: { include: { tag: { select: { id: true, name: true, slug: true } } } }
 			}
 		}),
@@ -89,6 +96,7 @@ function mapArticle(a: any): ArticleResponse {
 		createdAt: a.createdAt.toISOString(),
 		updatedAt: a.updatedAt.toISOString(),
 		author: a.author,
+		category: a.category ?? null,
 		tags: a.tags.map((at: any) => at.tag)
 	};
 }
