@@ -11,6 +11,9 @@ Dokumentasi REST API untuk konsumsi konten oleh **Hermes Agent**.
   - [`GET /api/hermes/article` — Health Check](#get-apihermesarticle--health-check)
   - [`POST /api/hermes/article` — Submit Article](#post-apihermesarticle--submit-article)
   - [`GET /api/hermes/articles` — Fetch Articles](#get-apihermesarticles--fetch-articles)
+  - [`GET /api/hermes/article/[slug]` — Get Article](#get-apihermesarticleslug--get-article)
+  - [`PATCH /api/hermes/article/[id]` — Update Article](#patch-apihermesarticleid--update-article)
+  - [`GET/PUT/PATCH /api/hermes/articles/[id]` — Articles Alias](#getputpatch-apihermesarticlesid--articles-alias)
 - [Public API](#public-api)
   - [`GET /api/articles` — List Articles](#get-apiarticles--list-articles)
   - [`GET /api/articles/[...slug]` — Get Article](#get-apiarticlesslug--get-article)
@@ -281,6 +284,49 @@ Fetch published articles (read scope required).
 ```
 
 **Response `200` (trending):** Array of article objects (sama seperti item `data[]` di atas, tanpa pagination wrapper).
+
+---
+
+### `GET /api/hermes/article/[slug]` — Get Article by Slug or ID
+
+Ambil 1 artikel by slug atau ID.
+
+**Headers:** `X-Hermes-API-Key` (required, scope `read`)
+
+**Response `200`:** Sama seperti item `data[]` di `/api/hermes/articles`.
+
+**Response `404`:**
+```json
+{ "error": "Article not found", "code": "NOT_FOUND", "request_id": "uuid" }
+```
+
+---
+
+### `PATCH /api/hermes/article/[id]` — Update Article
+
+Update artikel by ID atau slug.
+
+**Headers:** `X-Hermes-API-Key` (required, scope `write`)
+
+**Body (partial):**
+```json
+{
+  "title": "Updated Title",
+  "status": "PUBLISHED",
+  "category": "riset",
+  "tags": ["updated", "tags"]
+}
+```
+
+Semua field optional. Field yg tidak dikirim tidak berubah.
+
+**Response `200`:** Article object lengkap.
+
+---
+
+### `GET/PUT/PATCH /api/hermes/articles/[id]` — Same as `/api/hermes/article/[id]`
+
+Alias endpoint — identik dengan `/api/hermes/article/[id]` di atas.
 
 ---
 
