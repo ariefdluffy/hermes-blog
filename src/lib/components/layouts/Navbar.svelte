@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { theme } from '$lib/stores/theme';
+	import SearchModal from '$lib/components/ui/SearchModal.svelte';
 
 	interface Props {
 		user?: { id: string; username: string; role: string } | null;
@@ -9,6 +10,7 @@
 	let { user = null, currentPath = '/' }: Props = $props();
 
 	let menuOpen = $state(false);
+	let searchOpen = $state(false);
 
 	const navLinks = [
 		{ href: '/research', label: 'Riset' },
@@ -17,7 +19,17 @@
 		{ href: '/knowledge-base', label: 'Knowledge Base' },
 		{ href: '/about', label: 'Tentang' }
 	];
+
+	// Ctrl+K / Cmd+K to open search
+	function handleGlobalKeydown(e: KeyboardEvent) {
+		if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+			e.preventDefault();
+			searchOpen = true;
+		}
+	}
 </script>
+
+<svelte:window onkeydown={handleGlobalKeydown} />
 
 <header class="sticky top-0 z-40 border-b border-[var(--dark-border)] bg-[var(--dark-bg)]/80 backdrop-blur-md">
 	<div class="mx-auto max-w-3xl flex items-center justify-between px-5 py-3">
@@ -34,10 +46,20 @@
 				</a>
 			{/each}
 
+			<!-- Search button -->
+			<button
+				type="button"
+				onclick={() => { searchOpen = true; }}
+				class="p-1.5 rounded hover:bg-[var(--dark-bg-alt)] transition-colors"
+				aria-label="Search"
+			>
+				<svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+			</button>
+
 			<button
 				type="button"
 				onclick={() => theme.toggle()}
-				class="ml-2 p-1.5 rounded hover:bg-[var(--dark-bg-alt)] transition-colors"
+				class="p-1.5 rounded hover:bg-[var(--dark-bg-alt)] transition-colors"
 				aria-label="Toggle theme"
 			>
 				{#if theme.dark}

@@ -9,7 +9,7 @@ export const load: PageLoad = async ({ url, fetch }) => {
 		return { query: '', articles: [], totalArticles: 0, page: 1, totalPages: 0 };
 	}
 
-	const params = new URLSearchParams({ q, page: String(page), perPage: '12' });
+	const params = new URLSearchParams({ q, page: String(page), perPage: '10' });
 	const res = await fetch(`/api/search?${params.toString()}`);
 
 	const data = res.ok

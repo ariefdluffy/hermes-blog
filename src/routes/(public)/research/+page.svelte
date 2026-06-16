@@ -1,14 +1,20 @@
 <script lang="ts">
 	import SeoHead from '$lib/components/blog/SeoHead.svelte';
+	import Pagination from '$lib/components/ui/Pagination.svelte';
+	import { goto } from '$app/navigation';
 	import type { PageLoad } from './$types';
 
 	interface Props {
-		data: { articles: any[] };
+		data: { articles: any[]; totalArticles: number; page: number; totalPages: number };
 	}
 
 	let { data }: Props = $props();
 
 	const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
+
+	function handlePageChange(p: number) {
+		goto(`/research?page=${p}`);
+	}
 </script>
 
 <SeoHead title="Riset AI" description="Ringkasan paper arXiv & Semantic Scholar — di-generate otomatis oleh Hermes Agent." url="/research" />
@@ -76,6 +82,17 @@
 				</a>
 			{/each}
 		</div>
+
+		{#if data.totalPages > 1}
+			<div class="mt-8">
+				<Pagination
+					page={data.page}
+					totalItems={data.totalArticles}
+					perPage={10}
+					onchange={handlePageChange}
+				/>
+			</div>
+		{/if}
 	{:else}
 		<div class="py-16 text-center">
 			<svg class="w-12 h-12 mx-auto text-slate-600 mb-4" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2"/><path d="M6.453 15h11.094"/><path d="M8.5 2h7"/></svg>

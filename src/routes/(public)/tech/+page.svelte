@@ -1,11 +1,17 @@
 <script lang="ts">
 	import SeoHead from '$lib/components/blog/SeoHead.svelte';
+	import Pagination from '$lib/components/ui/Pagination.svelte';
+	import { goto } from '$app/navigation';
 
 	interface Props {
-		data: { articles: any[] };
+		data: { articles: any[]; totalArticles: number; page: number; totalPages: number };
 	}
 
 	let { data }: Props = $props();
+
+	function handlePageChange(p: number) {
+		goto(`/tech?page=${p}`);
+	}
 </script>
 
 <SeoHead title="Teknologi & AI" description="Berita AI terkini, artikel teknologi, dan tren industri." url="/tech" />
@@ -51,6 +57,17 @@
 				</a>
 			{/each}
 		</div>
+
+		{#if data.totalPages > 1}
+			<div class="mt-8">
+				<Pagination
+					page={data.page}
+					totalItems={data.totalArticles}
+					perPage={10}
+					onchange={handlePageChange}
+				/>
+			</div>
+		{/if}
 	{:else}
 		<div class="py-16 text-center">
 			<svg class="w-12 h-12 mx-auto text-slate-600 mb-4" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/></svg>

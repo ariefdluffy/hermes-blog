@@ -1,11 +1,17 @@
 <script lang="ts">
 	import SeoHead from '$lib/components/blog/SeoHead.svelte';
+	import Pagination from '$lib/components/ui/Pagination.svelte';
+	import { goto } from '$app/navigation';
 
 	interface Props {
-		data: { articles: any[] };
+		data: { articles: any[]; totalArticles: number; page: number; totalPages: number };
 	}
 
 	let { data }: Props = $props();
+
+	function handlePageChange(p: number) {
+		goto(`/tutorial?page=${p}`);
+	}
 </script>
 
 <SeoHead title="Tutorial" description="Panduan praktis seputar development, server, dan automasi." url="/tutorial" />
@@ -50,6 +56,17 @@
 				</a>
 			{/each}
 		</div>
+
+		{#if data.totalPages > 1}
+			<div class="mt-8">
+				<Pagination
+					page={data.page}
+					totalItems={data.totalArticles}
+					perPage={10}
+					onchange={handlePageChange}
+				/>
+			</div>
+		{/if}
 	{:else}
 		<div class="py-16 text-center">
 			<svg class="w-12 h-12 mx-auto text-slate-600 mb-4" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg>
