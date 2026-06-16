@@ -106,3 +106,5 @@
 		</nav>
 	{/if}
 </header>
+
+<SearchModal open={searchOpen} onclose={() => { searchOpen = false; }} />

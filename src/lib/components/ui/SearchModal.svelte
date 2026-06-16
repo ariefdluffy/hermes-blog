@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { onMount } from 'svelte';
 
 	interface Props {
 		open: boolean;
@@ -18,21 +17,27 @@
 
 	$effect(() => {
 		if (open) {
-			// Focus input after modal animation
 			requestAnimationFrame(() => inputEl?.focus());
 			document.body.style.overflow = 'hidden';
 		} else {
 			document.body.style.overflow = '';
+			query = '';
+			results = [];
+			selectedIdx = -1;
 		}
 		return () => { document.body.style.overflow = ''; };
 	});
 
-	// Keyboard shortcuts
-	function handleKeydown(e: KeyboardEvent) {
+	// Window handler: Escape only — closes modal from anywhere
+	function handleWindowKey(e: KeyboardEvent) {
 		if (e.key === 'Escape') {
+			e.preventDefault();
 			onclose();
-			return;
 		}
+	}
+
+	// Input handler: navigation (arrows, enter) — does NOT double-fire
+	function handleInputKey(e: KeyboardEvent) {
 		if (e.key === 'ArrowDown') {
 			e.preventDefault();
 			selectedIdx = Math.min(selectedIdx + 1, results.length - 1);
@@ -57,7 +62,7 @@
 	}
 
 	// Debounced search
-	function onInput(e: Event) {
+	function handleInput(e: Event) {
 		const val = (e.target as HTMLInputElement).value;
 		query = val;
 		selectedIdx = -1;
@@ -103,7 +108,7 @@
 		if (!q.trim()) return text;
 		const escaped = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 		const parts = text.split(new RegExp(`(${escaped})`, 'gi'));
-		return parts.map((part, i) =>
+		return parts.map((part) =>
 			part.toLowerCase() === q.toLowerCase()
 				? `<mark class="bg-indigo-500/20 text-indigo-300">${part}</mark>`
 				: part
@@ -111,7 +116,7 @@
 	}
 </script>
 
-<svelte:window onkeydown={handleKeydown} />
+<svelte:window onkeydown={handleWindowKey} />
 
 <!-- Backdrop -->
 {#if open}
@@ -137,9 +142,9 @@
 				<input
 					bind:this={inputEl}
 					type="text"
-					value={query}
-					oninput={onInput}
-					onkeydown={handleKeydown}
+					bind:value={query}
+					oninput={handleInput}
+					onkeydown={handleInputKey}
 					placeholder="Cari artikel..."
 					class="flex-1 bg-transparent text-base text-slate-200 placeholder-slate-500 outline-none"
 				/>
@@ -156,8 +161,12 @@
 			</div>
 
 			<!-- Results dropdown -->
-			{#if query.trim() && !loading}
-				{#if results.length > 0}
+			{#if query.trim()}
+				{#if loading}
+					<div class="mt-2 rounded-xl border border-slate-700/60 bg-slate-900/95 px-4 py-6 text-center shadow-2xl backdrop-blur-xl">
+						<svg class="w-6 h-6 mx-auto animate-spin text-indigo-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+					</div>
+				{:else if results.length > 0}
 					<div class="mt-2 rounded-xl border border-slate-700/60 bg-slate-900/95 py-2 shadow-2xl backdrop-blur-xl overflow-hidden">
 						{#each results as article, i (article.id)}
 							<button

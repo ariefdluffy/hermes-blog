@@ -1,4 +1,4 @@
-import type { Handle } from "@sveltejs/kit";
+import type { Handle, HandleServerError } from "@sveltejs/kit";
 import { verifyToken } from "$lib/server/auth";
 import { RateLimiter, securityHeaders } from "$lib/server/security";
 
@@ -52,4 +52,23 @@ export const handle: Handle = async ({ event, resolve }) => {
   }
 
   return response;
+};
+
+// ── Error handler ──────────────────────────────────────────────────────
+
+export const handleError: HandleServerError = async ({ error, event }) => {
+  const requestId = crypto.randomUUID();
+  const path = event.url.pathname;
+  const method = event.request.method;
+
+  console.error(`[${requestId}] ${method} ${path}:`, error);
+
+  // In production, send to monitoring service here
+
+  return {
+    message: process.env.NODE_ENV === "production"
+      ? "Internal server error"
+      : `${error}`,
+    requestId
+  };
 };
