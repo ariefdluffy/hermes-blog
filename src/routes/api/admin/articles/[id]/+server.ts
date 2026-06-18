@@ -195,12 +195,26 @@ export const PUT: RequestHandler = async ({ params, request, locals }) => {
 
 export const DELETE: RequestHandler = async ({ params, locals }) => {
   if (!locals.user) return authError();
-  if (locals.user.role !== "SUPERADMIN") return forbiddenError();
+
+  if (
+    !canAction(locals.user.role, "MANAGE_ARTICLES") &&
+    !canAction(locals.user.role, "EDIT_OWN_ARTICLES")
+  ) {
+    return forbiddenError();
+  }
 
   const article = await prisma.article.findUnique({ where: { id: params.id } });
   if (!article) {
     return json({ error: "Article not found" }, { status: 404 });
   }
+
+  if (locals.user.role === "AUTHOR" && article.authorId !== locals.user.id) {
+    return forbiddenError();
+  }
+
+  // Delete related records first to avoid FK constraint errors
+  await prisma.articleTag.deleteMany({ where: { articleId: params.id } });
+  await prisma.analytics.deleteMany({ where: { articleId: params.id } });
 
   await prisma.article.delete({ where: { id: params.id } });
 
